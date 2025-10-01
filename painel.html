@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+
+
+<!-- Modo de Venda -->
+<section id="modo-venda" class="tab">
+<h1>⚖️ Modos de Venda</h1>
+<input id="modoVendaNome" type="text" placeholder="Nome do Modo (ex: Unidade)">
+<input id="modoVendaFracao" type="text" placeholder="Ex: ½, ¼">
+<button id="btnAdicionarModoVenda">Adicionar Modo</button>
+<ul id="listaModosVenda"></ul>
+</section>
+
+
+<!-- Produtos -->
+<section id="produtos" class="tab">
+<h1>📦 Produtos</h1>
+<input id="prodNome" type="text" placeholder="Nome do Produto">
+<input id="prodPreco" type="text" placeholder="Preço (ex: 12,50)">
+<input id="prodImagem" type="text" placeholder="URL da Imagem">
+<select id="prodCategoria"></select>
+<select id="prodSubcategoria"></select>
+<select id="prodModoVenda"></select>
+<input id="prodDescricao" type="text" placeholder="Descrição">
+<button id="btnAdicionarProduto">Adicionar Produto</button>
+<div id="listaProdutosContainer"></div>
+</section>
+
+
+<!-- Clientes -->
+<section id="clientes" class="tab">
+<h1>👥 Clientes</h1>
+<p>Em breve CRUD de clientes.</p>
+</section>
+
+
+<!-- Cupons -->
+<section id="cupons" class="tab">
+<h1>🎟️ Cupons</h1>
+<p>Em breve CRUD de cupons.</p>
+</section>
+
+
+<!-- Publicidade -->
+<section id="publicidade" class="tab">
+<h1>📢 Publicidade</h1>
+<p>Em breve CRUD de publicidade.</p>
+</section>
+
+
+<!-- Dados da Loja -->
+<section id="dados-loja" class="tab">
+<h1>🗝️ Dados da Loja</h1>
+<p>Configurações da sua loja.</p>
+</section>
+
+
+<!-- Customizar -->
+<section id="customizar" class="tab">
+<h1>🎨 Customizar</h1>
+<label>Cor Principal <input type="color"></label>
+</section>
+
+
+<!-- Configurações -->
+<section id="config" class="tab">
+<h1>⚙️ Configurações</h1>
+<label>Bin ID: <input id="binId" type="text" placeholder="Digite seu BIN ID"></label>
+<label>Master Key: <input id="masterKey" type="password" placeholder="Digite sua Master Key"></label>
+<button id="btnPublicar">Publicar no Totem</button>
+<button id="btnRestaurarPadrao">Restaurar Padrão</button>
+<hr>
+<button id="btnExportarJson">Exportar JSON</button>
+<input id="fileImportJson" type="file" accept="application/json">
+</section>
+</main>
+
+
+<script src="painel.js"></script>
+</body>
+</html>
