@@ -119,19 +119,25 @@
     </section>
 
     <section id="clientes" class="tab">
-        <div class="card">
-            <h2>👥 Clientes</h2>
-            <div class="grid-container cols-2">
-                <input type="text" placeholder="Nome do Cliente">
-                <input type="tel" placeholder="Telefone">
-                <input type="text" placeholder="Endereço">
-                <input type="text" placeholder="Bairro">
-            </div>
-            <textarea placeholder="Histórico e observações..."></textarea>
-            <label class="checkbox-label"><input type="checkbox"> Permitir notificações</label>
-            <div class="form-buttons"><button class="btn-primary">Salvar Cliente</button></div>
+    <div class="card">
+        <h2>👥 Clientes</h2>
+        <div class="grid-container cols-2">
+            <input type="text" id="clienteNome" placeholder="Nome do Cliente">
+            <input type="tel" id="clienteTelefone" placeholder="Telefone">
+            <input type="text" id="clienteEndereco" placeholder="Endereço">
+            <input type="text" id="clienteBairro" placeholder="Bairro">
         </div>
-    </section>
+        <textarea id="clienteObservacoes" placeholder="Histórico e observações..."></textarea>
+        <label class="checkbox-label"><input type="checkbox" id="clientePermitirNotificacoes"> Permitir notificações</label>
+        <div class="form-buttons">
+            <button class="btn-primary" id="btnSalvarCliente">Salvar Cliente</button>
+        </div>
+        <hr>
+        <h3>Lista de Clientes</h3>
+        <div id="listaClientesContainer">
+            </div>
+    </div>
+</section>
 
     <section id="cupons" class="tab">
         <div class="card">
