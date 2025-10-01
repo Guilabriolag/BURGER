@@ -4,10 +4,17 @@ document.addEventListener('DOMContentLoaded', () => {
     // =================================================================
     let state = {
         produtos: [],
-        customizar: {},
+        categorias: [],
+        modoVenda: [],
+        clientes: [],
+        cupons: [],
+        publicidade: {},
         dadosLoja: {},
-        // ...outros módulos
+        cobertura: [],
+        customizar: {},
     };
+
+    let produtoEditandoId = null;
 
     // =================================================================
     // 2. SELETORES DE ELEMENTOS DO HTML (DOM)
@@ -16,12 +23,22 @@ document.addEventListener('DOMContentLoaded', () => {
     const tabs = document.querySelectorAll('main .tab');
     
     // Aba de Produtos
+    const prodNomeInput = document.getElementById('prodNome');
+    const prodPrecoInput = document.getElementById('prodPreco');
+    const prodImagemInput = document.getElementById('prodImagem');
+    const prodDescricaoInput = document.getElementById('prodDescricao');
     const btnAdicionarProduto = document.getElementById('btnAdicionarProduto');
     const listaProdutosContainer = document.getElementById('listaProdutosContainer');
     
     // Aba de Configurações
     const btnPublicar = document.getElementById('btnPublicar');
+    const btnExportar = document.querySelector('.btn-secondary:nth-of-type(1)');
+    const btnImportar = document.querySelector('.btn-secondary:nth-of-type(2)');
     const btnRestaurarPadrao = document.getElementById('btnRestaurarPadrao');
+
+    // Aba de Categorias
+    const formNovaCategoria = document.querySelector('#categorias .form-group button');
+    const listaCategorias = document.getElementById('category-tree');
 
     // =================================================================
     // 3. FUNÇÕES PRINCIPAIS
@@ -29,7 +46,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- NAVEGAÇÃO E UI GERAL ---
     function setupTabs() {
-        const TABS_CONFIG = [ { id: 'dashboard', label: '📊 Dashboard' }, { id: 'categorias', label: '🗂️ Categorias' }, { id: 'modo-venda', label: '⚖️ Modo de Venda' }, { id: 'produtos', label: '📦 Produtos' }, { id: 'clientes', label: '👥 Clientes' }, { id: 'cupons', label: '🎟️ Cupons' }, { id: 'publicidade', label: '📢 Publicidade' }, { id: 'dados-loja', label: '🗝️ Dados da Loja' }, { id: 'cobertura', label: '🗺️ Cobertura' }, { id: 'customizar', label: '🎨 Customizar' }, { id: 'config', label: '⚙️ Configurações' } ];
+        const TABS_CONFIG = [
+            { id: 'dashboard', label: '📊 Dashboard' },
+            { id: 'categorias', label: '🗂️ Categorias' },
+            { id: 'modo-venda', label: '⚖️ Modo de Venda' },
+            { id: 'produtos', label: '📦 Produtos' },
+            { id: 'clientes', label: '👥 Clientes' },
+            { id: 'cupons', label: '🎟️ Cupons' },
+            { id: 'publicidade', label: '📢 Publicidade' },
+            { id: 'dados-loja', label: '🗝️ Dados da Loja' },
+            { id: 'cobertura', label: '🗺️ Cobertura' },
+            { id: 'customizar', label: '🎨 Customizar' },
+            { id: 'config', label: '⚙️ Configurações' }
+        ];
         TABS_CONFIG.forEach(tabInfo => {
             const button = document.createElement('button');
             button.dataset.tab = tabInfo.id;
@@ -62,58 +91,167 @@ document.addEventListener('DOMContentLoaded', () => {
             listaProdutosContainer.innerHTML = '<p>Nenhum produto adicionado ainda.</p>';
             return;
         }
-        state.produtos.forEach((produto, index) => {
+        state.produtos.forEach((produto) => {
             const produtoDiv = document.createElement('div');
             produtoDiv.className = 'product-item';
             produtoDiv.innerHTML = `
                 <img src="${produto.imagem || 'https://via.placeholder.com/50'}" alt="Imagem">
-                <div><strong>${produto.nome}</strong><br><span>R$ ${produto.preco}</span></div>
-                <button class="btn-danger" data-index="${index}">Remover</button>
+                <div><strong>${produto.nome}</strong><br><span>R$ ${produto.preco.toFixed(2)}</span></div>
+                <button class="btn-secondary btn-small" data-id="${produto.id}">Editar</button>
+                <button class="btn-danger btn-small" data-id="${produto.id}">Remover</button>
             `;
             listaProdutosContainer.appendChild(produtoDiv);
         });
     }
 
-    function adicionarProduto() {
-        const nome = document.getElementById('prodNome').value.trim();
-        const preco = parseFloat(document.getElementById('prodPreco').value);
+    function adicionarOuAtualizarProduto() {
+        const nome = prodNomeInput.value.trim();
+        const preco = parseFloat(prodPrecoInput.value);
         if (!nome || isNaN(preco)) {
             alert('Nome e Preço são obrigatórios!');
             return;
         }
-        const novoProduto = {
-            id: Date.now(),
-            nome,
-            preco,
-            imagem: document.getElementById('prodImagem').value.trim(),
-            descricao: document.getElementById('prodDescricao').value.trim(),
-            // ...outros campos
-        };
-        state.produtos.push(novoProduto);
-        document.getElementById('prodNome').value = '';
-        document.getElementById('prodPreco').value = '';
-        document.getElementById('prodImagem').value = '';
-        document.getElementById('prodDescricao').value = '';
+
+        if (produtoEditandoId) {
+            const produtoExistente = state.produtos.find(p => p.id === produtoEditandoId);
+            if (produtoExistente) {
+                produtoExistente.nome = nome;
+                produtoExistente.preco = preco;
+                produtoExistente.imagem = prodImagemInput.value.trim();
+                produtoExistente.descricao = prodDescricaoInput.value.trim();
+            }
+            produtoEditandoId = null;
+            btnAdicionarProduto.textContent = 'Adicionar Produto';
+            alert("Produto atualizado com sucesso!");
+        } else {
+            const novoProduto = {
+                id: Date.now(),
+                nome,
+                preco,
+                imagem: prodImagemInput.value.trim(),
+                descricao: prodDescricaoInput.value.trim(),
+            };
+            state.produtos.push(novoProduto);
+            alert("Produto adicionado com sucesso!");
+        }
+
+        limparCamposProduto();
         renderizarProdutos();
     }
 
-    function removerProduto(index) {
-        state.produtos.splice(index, 1);
-        renderizarProdutos();
+    function editarProduto(id) {
+        const produto = state.produtos.find(p => p.id === parseInt(id));
+        if (produto) {
+            prodNomeInput.value = produto.nome;
+            prodPrecoInput.value = produto.preco;
+            prodImagemInput.value = produto.imagem;
+            prodDescricaoInput.value = produto.descricao;
+            produtoEditandoId = produto.id;
+            btnAdicionarProduto.textContent = 'Salvar Alterações';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
     }
 
+    function removerProduto(id) {
+        const confirmacao = confirm("Tem certeza que deseja remover este produto?");
+        if (confirmacao) {
+            state.produtos = state.produtos.filter(p => p.id !== parseInt(id));
+            renderizarProdutos();
+            alert("Produto removido com sucesso!");
+        }
+    }
+
+    function limparCamposProduto() {
+        prodNomeInput.value = '';
+        prodPrecoInput.value = '';
+        prodImagemInput.value = '';
+        prodDescricaoInput.value = '';
+    }
+
+    // --- LÓGICA DA ABA CATEGORIAS ---
+    function renderizarCategorias() {
+        listaCategorias.innerHTML = '';
+        if (state.categorias.length === 0) {
+            listaCategorias.innerHTML = '<p>Nenhuma categoria adicionada.</p>';
+            return;
+        }
+
+        state.categorias.forEach(cat => {
+            const details = document.createElement('details');
+            details.innerHTML = `
+                <summary>${cat.nome} <button class="btn-small btn-danger" data-id="${cat.id}">Excluir</button></summary>
+                <ul>
+                    ${cat.subcategorias.map(sub => `
+                        <li>${sub.nome} <button class="btn-small btn-danger" data-sub-id="${sub.id}" data-cat-id="${cat.id}">Excluir</button></li>
+                    `).join('')}
+                    <li><input type="text" placeholder="Nova Subcategoria"><button class="btn-small" data-cat-id="${cat.id}">Adicionar</button></li>
+                </ul>
+            `;
+            listaCategorias.appendChild(details);
+        });
+    }
+
+    function adicionarCategoria() {
+        const input = document.querySelector('#categorias input[type="text"]');
+        const nome = input.value.trim();
+        if (nome) {
+            const novaCategoria = {
+                id: Date.now(),
+                nome,
+                subcategorias: []
+            };
+            state.categorias.push(novaCategoria);
+            input.value = '';
+            renderizarCategorias();
+        }
+    }
+
+    function gerenciarSubcategorias(e) {
+        if (e.target.matches('.btn-small')) {
+            const catId = parseInt(e.target.dataset.catId);
+            const categoria = state.categorias.find(c => c.id === catId);
+            if (!categoria) return;
+
+            const input = e.target.previousElementSibling;
+            if (input.value) {
+                const novaSub = {
+                    id: Date.now(),
+                    nome: input.value.trim()
+                };
+                categoria.subcategorias.push(novaSub);
+                input.value = '';
+                renderizarCategorias();
+            }
+        }
+        if (e.target.matches('[data-sub-id]')) {
+            const catId = parseInt(e.target.dataset.catId);
+            const subId = parseInt(e.target.dataset.subId);
+            const categoria = state.categorias.find(c => c.id === catId);
+            if (categoria) {
+                categoria.subcategorias = categoria.subcategorias.filter(sub => sub.id !== subId);
+                renderizarCategorias();
+            }
+        }
+    }
+
+    function removerCategoria(e) {
+        if (e.target.matches('.btn-danger')) {
+            const id = parseInt(e.target.dataset.id);
+            state.categorias = state.categorias.filter(c => c.id !== id);
+            renderizarCategorias();
+        }
+    }
+    
     // --- LÓGICA DA ABA CONFIGURAÇÕES ---
     function coletarDadosDoPainel() {
-        // Coleta de outras abas (exemplo)
+        // Coleta de dados de outras abas (exemplo)
         const customizarTab = document.getElementById('customizar');
         state.customizar.corPrincipal = customizarTab.querySelector('input[type="color"]').value;
-        // ...coletar outros dados aqui
         console.log("Dados coletados:", state);
     }
 
     async function publicarDados() {
         if (!confirm("Publicar os dados atuais no totem? Isso irá sobrescrever a versão online.")) return;
-        
         coletarDadosDoPainel();
 
         const binId = document.getElementById('binId').value;
@@ -137,13 +275,53 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    async function importarDados() {
+        if (!confirm("Importar os dados online do totem? Isso irá sobrescrever os dados locais do painel.")) return;
+
+        const binId = document.getElementById('binId').value;
+        const masterKey = document.getElementById('masterKey').value;
+        if (!masterKey || !binId) {
+            alert("Erro: O BIN ID e a Master Key são obrigatórios!");
+            return;
+        }
+
+        try {
+            const response = await fetch(`https://api.jsonbin.io/v3/b/${binId}`, {
+                headers: { 'X-Master-Key': masterKey }
+            });
+
+            if (!response.ok) throw new Error(`Erro na importação: ${response.statusText}`);
+            
+            const data = await response.json();
+            state = data.record;
+            
+            // Renderizar as abas com os dados importados
+            renderizarProdutos();
+            renderizarCategorias();
+            
+            alert("✅ Sucesso! Os dados foram importados.");
+        } catch (error) {
+            console.error("Falha na Importação:", error);
+            alert(`❌ Falha ao importar os dados. Verifique o console (F12).`);
+        }
+    }
+
     function restaurarPadrao() {
         const senha = prompt("Para restaurar, digite a senha (1234):");
         if (senha === "1234") {
             if (confirm("TEM CERTEZA? Todos os dados não publicados serão perdidos.")) {
                 state.produtos = [];
-                // Resetar outros estados...
+                state.categorias = [];
+                state.modoVenda = [];
+                state.clientes = [];
+                state.cupons = [];
+                state.publicidade = {};
+                state.dadosLoja = {};
+                state.cobertura = [];
+                state.customizar = {};
+
                 renderizarProdutos();
+                renderizarCategorias();
                 alert("Painel restaurado para os padrões.");
             }
         } else if (senha !== null) {
@@ -154,13 +332,23 @@ document.addEventListener('DOMContentLoaded', () => {
     // =================================================================
     // 4. EVENT LISTENERS
     // =================================================================
-    btnAdicionarProduto.addEventListener('click', adicionarProduto);
+    btnAdicionarProduto.addEventListener('click', adicionarOuAtualizarProduto);
     listaProdutosContainer.addEventListener('click', (e) => {
         if (e.target.matches('.btn-danger')) {
-            removerProduto(e.target.dataset.index);
+            removerProduto(e.target.dataset.id);
+        } else if (e.target.matches('.btn-secondary')) {
+            editarProduto(e.target.dataset.id);
         }
     });
+
+    formNovaCategoria.addEventListener('click', adicionarCategoria);
+    listaCategorias.addEventListener('click', (e) => {
+        removerCategoria(e);
+        gerenciarSubcategorias(e);
+    });
+
     btnPublicar.addEventListener('click', publicarDados);
+    btnImportar.addEventListener('click', importarDados);
     btnRestaurarPadrao.addEventListener('click', restaurarPadrao);
 
     // =================================================================
@@ -169,4 +357,5 @@ document.addEventListener('DOMContentLoaded', () => {
     setupTabs();
     setupDashboardChart();
     renderizarProdutos();
+    renderizarCategorias();
 });
