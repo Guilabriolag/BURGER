@@ -1,80 +1,229 @@
 <!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8" />
+    <title>Painel SEUNEGOCIO - Gestão Completa</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="painel.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
 
+<header>
+    <h1>Painel de Gestão SEUNEGOCIO</h1>
+    <p>O controle completo do seu negócio em um só lugar.</p>
+</header>
 
-<!-- Modo de Venda -->
-<section id="modo-venda" class="tab">
-<h1>⚖️ Modos de Venda</h1>
-<input id="modoVendaNome" type="text" placeholder="Nome do Modo (ex: Unidade)">
-<input id="modoVendaFracao" type="text" placeholder="Ex: ½, ¼">
-<button id="btnAdicionarModoVenda">Adicionar Modo</button>
-<ul id="listaModosVenda"></ul>
-</section>
+<nav id="menu">
+    </nav>
 
+<main>
+    <section id="dashboard" class="tab">
+        <div class="card">
+            <h2>📊 Dashboard</h2>
+            <div class="filters">
+                <select id="periodoFiltro">
+                    <option value="dia">Hoje</option>
+                    <option value="semana">Esta Semana</option>
+                    <option value="mes">Este Mês</option>
+                </select>
+            </div>
+            <div class="grid-container summary-grid">
+                <div class="summary-card">
+                    <h4>Total de Vendas</h4>
+                    <p>R$ 0,00</p>
+                </div>
+                <div class="summary-card">
+                    <h4>Total de Pedidos</h4>
+                    <p>0</p>
+                </div>
+                <div class="summary-card">
+                    <h4>Novos Clientes</h4>
+                    <p>0</p>
+                </div>
+                <div class="summary-card">
+                    <h4>Produto Mais Vendido</h4>
+                    <p>-</p>
+                </div>
+            </div>
+            <div class="chart-container">
+                <canvas id="vendasChart"></canvas>
+            </div>
+        </div>
+    </section>
 
-<!-- Produtos -->
-<section id="produtos" class="tab">
-<h1>📦 Produtos</h1>
-<input id="prodNome" type="text" placeholder="Nome do Produto">
-<input id="prodPreco" type="text" placeholder="Preço (ex: 12,50)">
-<input id="prodImagem" type="text" placeholder="URL da Imagem">
-<select id="prodCategoria"></select>
-<select id="prodSubcategoria"></select>
-<select id="prodModoVenda"></select>
-<input id="prodDescricao" type="text" placeholder="Descrição">
-<button id="btnAdicionarProduto">Adicionar Produto</button>
-<div id="listaProdutosContainer"></div>
-</section>
+    <section id="categorias" class="tab">
+        <div class="card">
+            <h2>🗂️ Categorias e Subcategorias</h2>
+            <div class="form-group">
+                <input type="text" placeholder="Nome da Nova Categoria">
+                <button>Criar Categoria</button>
+            </div>
+            <div id="category-tree">
+                <details>
+                    <summary>Lanches <button class="btn-small btn-danger">Excluir</button></summary>
+                    <ul>
+                        <li>Hamburgers <button class="btn-small btn-danger">Excluir</button></li>
+                        <li>Pizzas <button class="btn-small btn-danger">Excluir</button></li>
+                        <li><input type="text" placeholder="Nova Subcategoria"><button class="btn-small">Adicionar</button></li>
+                    </ul>
+                </details>
+            </div>
+        </div>
+    </section>
 
+    <section id="modo-venda" class="tab">
+        <div class="card">
+            <h2>⚖️ Modo de Venda</h2>
+            <div class="form-group">
+                <label>Selecione o modo de venda:</label>
+                <select>
+                    <option>Unidade</option>
+                    <option>Kg</option>
+                    <option>Litro</option>
+                    <option>M²</option>
+                    <option>Combo</option>
+                    <option>Meia-a-meia</option>
+                    <option>Peso</option>
+                </select>
+                <label>Campo para fração (opcional):</label>
+                <input type="text" placeholder="Ex: ½, ¼">
+                <button>Adicionar Modo</button>
+            </div>
+        </div>
+    </section>
 
-<!-- Clientes -->
-<section id="clientes" class="tab">
-<h1>👥 Clientes</h1>
-<p>Em breve CRUD de clientes.</p>
-</section>
+    <section id="produtos" class="tab">
+        <div class="card">
+            <h2>📦 Produtos</h2>
+            <div class="grid-container cols-3">
+                <input type="text" id="prodNome" placeholder="Nome do Produto">
+                <input type="number" id="prodPreco" placeholder="Preço (R$)">
+                <input type="text" id="prodImagem" placeholder="URL da Imagem">
+                <select id="prodCategoria"><option>Categoria</option></select>
+                <select id="prodSubcategoria"><option>Subcategoria</option></select>
+                <select id="prodModoVenda"><option>Modo de Venda</option></select>
+                <input type="number" id="prodEstoque" placeholder="Estoque">
+                <label class="checkbox-label"><input type="checkbox" id="prodDestaque"> Destaque</label>
+                <label class="checkbox-label"><input type="checkbox" id="prodAtivo"> Ativo</label>
+            </div>
+            <textarea id="prodDescricao" placeholder="Descrição do produto"></textarea>
+            <div class="form-buttons">
+                <button id="btnAdicionarProduto" class="btn-primary">Adicionar Produto</button>
+            </div>
+            <hr>
+            <h3>Lista de Produtos</h3>
+            <div id="listaProdutosContainer">
+                </div>
+        </div>
+    </section>
 
+    <section id="clientes" class="tab">
+        <div class="card">
+            <h2>👥 Clientes</h2>
+            <div class="grid-container cols-2">
+                <input type="text" placeholder="Nome do Cliente">
+                <input type="tel" placeholder="Telefone">
+                <input type="text" placeholder="Endereço">
+                <input type="text" placeholder="Bairro">
+            </div>
+            <textarea placeholder="Histórico e observações..."></textarea>
+            <label class="checkbox-label"><input type="checkbox"> Permitir notificações</label>
+            <div class="form-buttons"><button class="btn-primary">Salvar Cliente</button></div>
+        </div>
+    </section>
 
-<!-- Cupons -->
-<section id="cupons" class="tab">
-<h1>🎟️ Cupons</h1>
-<p>Em breve CRUD de cupons.</p>
-</section>
+    <section id="cupons" class="tab">
+        <div class="card">
+            <h2>🎟️ Cupons</h2>
+            <div class="grid-container cols-3">
+                <input type="text" placeholder="Código (Ex: PROMO10)">
+                <select><option>Tipo de Desconto (% ou R$)</option></select>
+                <input type="number" placeholder="Valor do Desconto">
+                <input type="date" title="Validade">
+                <input type="number" placeholder="Valor mínimo de compra">
+                <input type="number" placeholder="Limite de uso">
+            </div>
+            <textarea placeholder="Mensagem promocional"></textarea>
+            <label class="checkbox-label"><input type="checkbox"> Ativo</label>
+            <div class="form-buttons"><button class="btn-primary">Criar Cupom</button></div>
+        </div>
+    </section>
 
+    <section id="publicidade" class="tab">
+        <div class="card">
+            <h2>📢 Publicidade</h2>
+            <h4>Banner Principal</h4>
+            <input type="text" placeholder="Texto do banner">
+            <input type="text" placeholder="URL da imagem">
+            <input type="text" placeholder="Link de destino">
+            <h4>Carrossel de Imagens</h4>
+            <textarea placeholder="URLs das imagens, uma por linha"></textarea>
+            <h4>Ícones Redes Sociais</h4>
+            <input type="text" placeholder="Link do Instagram">
+            <input type="text" placeholder="Link do Facebook">
+            <input type="text" placeholder="Número do WhatsApp">
+            <div class="form-buttons"><button class="btn-primary">Salvar Publicidade</button></div>
+        </div>
+    </section>
 
-<!-- Publicidade -->
-<section id="publicidade" class="tab">
-<h1>📢 Publicidade</h1>
-<p>Em breve CRUD de publicidade.</p>
-</section>
+    <section id="dados-loja" class="tab">
+        <div class="card">
+            <h2>🗝️ Keys / Dados da Loja</h2>
+            <div class="grid-container cols-2">
+                <input type="text" placeholder="Nome da Loja">
+                <input type="tel" placeholder="Telefone Principal">
+                <input type="text" placeholder="Chave PIX">
+                <input type="text" placeholder="Dados Bancários">
+                <input type="text" placeholder="Endereço Físico">
+                <input type="text" placeholder="URL do Logo">
+            </div>
+            <textarea placeholder="Horários de funcionamento"></textarea>
+        </div>
+    </section>
 
+    <section id="cobertura" class="tab">
+        <div class="card">
+            <h2>🗺️ Cobertura de Entrega</h2>
+            <div class="grid-container cols-3">
+                <input type="text" placeholder="Nome do Bairro">
+                <input type="number" placeholder="Taxa de Entrega (R$)">
+                <input type="text" placeholder="Tempo Estimado (min)">
+            </div>
+            <div class="form-buttons"><button class="btn-primary">Adicionar Bairro</button></div>
+        </div>
+    </section>
 
-<!-- Dados da Loja -->
-<section id="dados-loja" class="tab">
-<h1>🗝️ Dados da Loja</h1>
-<p>Configurações da sua loja.</p>
-</section>
+    <section id="customizar" class="tab">
+        <div class="card">
+            <h2>🎨 Customizar</h2>
+            <h4>Visual</h4>
+            <input type="color" title="Cor Principal">
+            <input type="text" placeholder="Fonte (Ex: Roboto)">
+            <h4>Segurança</h4>
+            <label class="checkbox-label"><input type="checkbox"> Ativar Modo Escuro</label>
+            <h4>Música Ambiente</h4>
+            <input type="text" placeholder="Link do YouTube (embed)">
+        </div>
+    </section>
 
-
-<!-- Customizar -->
-<section id="customizar" class="tab">
-<h1>🎨 Customizar</h1>
-<label>Cor Principal <input type="color"></label>
-</section>
-
-
-<!-- Configurações -->
-<section id="config" class="tab">
-<h1>⚙️ Configurações</h1>
-<label>Bin ID: <input id="binId" type="text" placeholder="Digite seu BIN ID"></label>
-<label>Master Key: <input id="masterKey" type="password" placeholder="Digite sua Master Key"></label>
-<button id="btnPublicar">Publicar no Totem</button>
-<button id="btnRestaurarPadrao">Restaurar Padrão</button>
-<hr>
-<button id="btnExportarJson">Exportar JSON</button>
-<input id="fileImportJson" type="file" accept="application/json">
-</section>
+    <section id="config" class="tab">
+        <div class="card">
+            <h2>⚙️ Configurações</h2>
+            <h4>Integração JSONBIN</h4>
+            <input type="text" id="binId" placeholder="Seu BIN ID" value="68db6557ae596e708f00b490">
+            <input type="password" id="masterKey" placeholder="Sua Master Key (X-Master-Key)">
+            <h4>Ações</h4>
+            <div class="form-buttons">
+                <button id="btnPublicar" class="btn-primary">Publicar no Totem</button>
+                <button class="btn-secondary">Exportar JSON</button>
+                <button class="btn-secondary">Importar JSON</button>
+                <button id="btnRestaurarPadrao" class="btn-danger">Restaurar Padrão</button>
+            </div>
+        </div>
+    </section>
 </main>
-
 
 <script src="painel.js"></script>
 </body>
-</html>
+          </html>
