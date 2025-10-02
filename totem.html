@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Totem - SeuNegócio</title>
+<link rel="stylesheet" href="painel.css">
+</head>
+<body>
+<header>
+<h1 id="lojaNome">Carregando...</h1>
+<img id="lojaLogo" src="" alt="Logo" style="max-height:80px;">
+</header>
+
+<div id="conteudo">
+  <div class="section" id="produtosSec"><h2>Produtos</h2><div class="grid" id="produtosContainer"></div></div>
+  <div class="section" id="clientesSec"><h2>Clientes</h2><div class="grid" id="clientesContainer"></div></div>
+  <div class="section" id="cuponsSec"><h2>Cupons</h2><div class="grid" id="cuponsContainer"></div></div>
+  <div class="section" id="publicidadeSec"><h2>Publicidade</h2><div id="publicidadeContainer"></div></div>
+  <div class="section" id="coberturaSec"><h2>Cobertura</h2><div class="grid" id="coberturaContainer"></div></div>
+  <div class="section" id="dadosLojaSec"><h2>Dados da Loja</h2><div id="dadosLojaContainer"></div></div>
+</div>
+
+<script>
+async function carregarTotem(){
+    const binId = new URLSearchParams(window.location.search).get('bin');
+    if(!binId){ alert("❌ Nenhum bin=ID fornecido"); return; }
+    try{
+        const res = await fetch(`https://api.jsonbin.io/v3/b/${binId}/latest`);
+        if(!res.ok) throw new Error("Erro JSONBin");
+        const state = (await res.json()).record;
+
+        document.getElementById("lojaNome").textContent = state.loja.nome || "Loja";
+        document.getElementById("lojaLogo").src = state.loja.logo || "";
+
+        document.getElementById("produtosContainer").innerHTML = state.produtos.map(p=>`
+            <div class="item-container">
+              <img src="${p.imagem}" alt="${p.nome}">
+              <strong>${p.nome}</strong>
+              <span>R$ ${p.preco.toFixed(2)}</span>
+              <span>${p.categoria} | ${p.subcategoria}</span>
+              <span>${p.modoVenda}</span>
+            </div>
+        `).join("");
+
+        document.getElementById("clientesContainer").innerHTML = state.clientes.map(c=>`
+            <div class="item-container">
+              <strong>${c.nome}</strong>
+              <span>${c.telefone}</span>
+              <span>${c.bairro}</span>
+            </div>
+        `).join("");
+
+        document.getElementById("cuponsContainer").innerHTML = state.cupons.map(c=>`
+            <div class="item-container">
+              <strong>${c.codigo}</strong>
+              <span>${c.tipo}${c.valor}</span>
+              <span>Validade: ${c.validade}</span>
+            </div>
+        `).join("");
+
+        const pub = state.publicidade;
+        document.getElementById("publicidadeContainer").innerHTML = `
+            <p>${pub.texto}</p>
+            <a href="${pub.link}" target="_blank"><img src="${pub.banner}" style="max-width:100%"></a>
+            ${pub.carrossel.map(url=>`<img src="${url}" style="max-width:100%;margin-top:5px">`).join("")}
+            <p>Instagram: <a href="${pub.redesSociais.instagram}" target="_blank">${pub.redesSociais.instagram}</a></p>
+            <p>Facebook: <a href="${pub.redesSociais.facebook}" target="_blank">${pub.redesSociais.facebook}</a></p>
+            <p>WhatsApp: <a href="${pub.redesSociais.whatsapp}" target="_blank">${pub.redesSociais.whatsapp}</a></p>
+        `;
+
+        document.getElementById("coberturaContainer").innerHTML = state.cobertura.map(c=>`
+            <div class="item-container">
+              <strong>${c.nome}</strong>
+              <span>Taxa: R$ ${c.taxa}</span>
+              <span>Tempo: ${c.tempo} min</span>
+            </div>
+        `).join("");
+
+        const loja = state.loja;
+        document.getElementById("dadosLojaContainer").innerHTML = `
+            <p>Telefone: ${loja.telefone}</p>
+            <p>PIX: ${loja.pix}</p>
+            <p>Banco: ${loja.banco}</p>
+            <p>Endereço: ${loja.endereco}</p>
+            <p>Horário: ${loja.horario}</p>
+            <p>Cor Primária: ${loja.corPrimaria}</p>
+            <p>Fonte: ${loja.fonte}</p>
+            <p>Modo Escuro: ${loja.modoEscuro?"Ativo":"Desativado"}</p>
+        `;
+    }catch(e){ console.error(e); alert("❌ Erro ao carregar Totem"); }
+}
+
+window.onload = carregarTotem;
+</script>
+</body>
+</html>
