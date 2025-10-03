@@ -453,3 +453,24 @@ window.addEventListener("DOMContentLoaded", () => {
   const firstTab = document.querySelector(".tab");
   if (firstTab) firstTab.classList.add("active");
 });
+document.addEventListener("DOMContentLoaded", () => {
+  const menuItems = document.querySelectorAll("#menu-bar li");
+  const tabs = document.querySelectorAll("main > section.tab");
+
+  menuItems.forEach(item => {
+    item.addEventListener("click", () => {
+      const targetId = item.getAttribute("data-tab");
+
+      // Remove 'active' de todas as abas e botões
+      tabs.forEach(tab => tab.classList.remove("active"));
+      menuItems.forEach(btn => btn.classList.remove("active"));
+
+      // Ativa a aba correspondente e o botão
+      const targetTab = document.getElementById(targetId);
+      if (targetTab) {
+        targetTab.classList.add("active");
+        item.classList.add("active");
+      }
+    });
+  });
+});
