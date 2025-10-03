@@ -6,30 +6,25 @@
   <title>Painel Administrativo - SeuNegócio</title>
   <link rel="stylesheet" href="painel.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="painel.js" defer></script>
 </head>
 <body>
   <div id="app">
-    <!-- Menu lateral -->
-    <aside id="sidebar" class="collapsed">
-      <h2>SeuNegócio</h2>
-      <button id="toggleMenu">☰</button>
-      <nav id="menu">
-        <ul>
-          <li data-tab="dashboard">📊 Dashboard</li>
-          <li data-tab="categorias">🗂️ Categorias</li>
-          <li data-tab="modo-venda">⚖️ Modo de Venda</li>
-          <li data-tab="produtos">📦 Produtos</li>
-          <li data-tab="clientes">👥 Clientes</li>
-          <li data-tab="cupons">🎟️ Cupons</li>
-          <li data-tab="publicidade">📢 Publicidade</li>
-          <li data-tab="dados-loja">🗝️ Dados da Loja</li>
-          <li data-tab="cobertura">🗺️ Cobertura</li>
-          <li data-tab="customizar">🎨 Customizar</li>
-          <li data-tab="preview">🖥️ Preview</li>
-          <li data-tab="config">⚙️ Configurações</li>
-        </ul>
-      </nav>
-    </aside>
+    <!-- Menu horizontal -->
+    <ul id="menu-bar">
+      <li data-tab="dashboard" class="active">📊 Dashboard</li>
+      <li data-tab="categorias">🗂️ Categorias</li>
+      <li data-tab="modo-venda">⚖️ Modo de Venda</li>
+      <li data-tab="produtos">📦 Produtos</li>
+      <li data-tab="clientes">👥 Clientes</li>
+      <li data-tab="cupons">🎟️ Cupons</li>
+      <li data-tab="publicidade">📢 Publicidade</li>
+      <li data-tab="dados-loja">🗝️ Dados da Loja</li>
+      <li data-tab="cobertura">🗺️ Cobertura</li>
+      <li data-tab="customizar">🎨 Customizar</li>
+      <li data-tab="preview">🖥️ Preview</li>
+      <li data-tab="config">⚙️ Configurações</li>
+    </ul>
 
     <!-- Conteúdo -->
     <main>
@@ -188,7 +183,5 @@
       </section>
     </main>
   </div>
-
-  <script src="painel.js"></script>
 </body>
 </html>
