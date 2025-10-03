@@ -1,5 +1,5 @@
 /* ===============================
-   Painel Administrativo - NOVO painel.css
+   Painel Administrativo - painel.css
    =============================== */
 
 /* Reset */
@@ -54,7 +54,6 @@ main {
   padding: 30px;
 }
 
-/* Abas */
 .tab {
   display: none;
 }
@@ -64,6 +63,13 @@ main {
 }
 
 /* Formulários */
+.form-group {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
 .form-grid {
   display: grid;
   gap: 15px;
@@ -141,6 +147,17 @@ button:hover {
 .produto-card .actions {
   display: flex;
   gap: 10px;
+}
+
+/* Categoria */
+.categoria {
+  background: #ecf0f1;
+  padding: 10px;
+  border-radius: 6px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 /* Responsivo */
