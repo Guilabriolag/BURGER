@@ -272,6 +272,7 @@ function removerProduto(index) {
     atualizarPreview();
   }
 }
+
 // ===============================
 // Preview em tempo real
 // ===============================
