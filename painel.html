@@ -33,34 +33,38 @@
 
     <!-- Conteúdo -->
     <main>
+      <!-- Dashboard -->
       <section id="dashboard" class="tab active">
         <h2>📊 Dashboard</h2>
         <canvas id="vendasChart"></canvas>
       </section>
 
+      <!-- Categorias -->
       <section id="categorias" class="tab">
         <h2>🗂️ Categorias</h2>
         <div class="form-group">
-          <input type="text" placeholder="Nova Categoria">
-          <button class="btn-primary">Adicionar Categoria</button>
+          <input type="text" id="novaCategoria" placeholder="Nova Categoria">
+          <button id="btnAdicionarCategoria" class="btn-primary">Adicionar Categoria</button>
         </div>
         <div id="category-tree"></div>
       </section>
 
+      <!-- Modo de Venda -->
       <section id="modo-venda" class="tab">
         <h2>⚖️ Modo de Venda</h2>
         <div class="form-group">
-          <select>
+          <select id="selectModoVenda">
             <option value="Unidade">Unidade</option>
             <option value="Kg">Kg</option>
             <option value="Litro">Litro</option>
             <option value="Combo">Combo</option>
           </select>
-          <input type="text" placeholder="Ex: 500g, 1/2 dz">
+          <input type="text" id="inputModoVendaExemplo" placeholder="Ex: 500g, 1/2 dz">
           <button class="btn-primary">Adicionar</button>
         </div>
       </section>
 
+      <!-- Produtos -->
       <section id="produtos" class="tab">
         <h2>📦 Produtos</h2>
         <div class="form-grid">
@@ -75,10 +79,11 @@
           <label><input id="prodDestaque" type="checkbox"> Destaque</label>
           <label><input id="prodAtivo" type="checkbox"> Ativo</label>
         </div>
-        <button class="btn-primary">Adicionar Produto</button>
+        <button id="btnAdicionarProduto" class="btn-primary">Adicionar Produto</button>
         <div id="listaProdutosContainer"></div>
       </section>
 
+      <!-- Clientes -->
       <section id="clientes" class="tab">
         <h2>👥 Clientes</h2>
         <div class="form-grid">
@@ -92,6 +97,7 @@
         <button class="btn-primary">Salvar Cliente</button>
       </section>
 
+      <!-- Cupons -->
       <section id="cupons" class="tab">
         <h2>🎟️ Cupons</h2>
         <div class="form-grid">
@@ -110,6 +116,7 @@
         <button class="btn-primary">Criar Cupom</button>
       </section>
 
+      <!-- Publicidade -->
       <section id="publicidade" class="tab">
         <h2>📢 Publicidade</h2>
         <div class="form-grid">
@@ -124,6 +131,7 @@
         <button class="btn-primary">Salvar Publicidade</button>
       </section>
 
+      <!-- Dados da Loja -->
       <section id="dados-loja" class="tab">
         <h2>🗝️ Dados da Loja</h2>
         <div class="form-grid">
@@ -137,6 +145,7 @@
         </div>
       </section>
 
+      <!-- Cobertura -->
       <section id="cobertura" class="tab">
         <h2>🗺️ Cobertura</h2>
         <div class="form-grid">
@@ -147,30 +156,35 @@
         <button class="btn-primary">Adicionar Bairro</button>
       </section>
 
+      <!-- Customizar -->
       <section id="customizar" class="tab">
         <h2>🎨 Customizar</h2>
         <div class="form-grid">
-          <input type="color" value="#3498db">
-          <input type="text" placeholder="Fonte (Ex: Arial)">
-          <label><input type="checkbox"> Modo Escuro</label>
-          <input type="url" placeholder="URL Música Ambiente">
+          <input type="color" value="#3498db" id="corPrimaria">
+          <input type="color" value="#95a5a6" id="corSecundaria">
+          <input type="url" placeholder="Imagem de Fundo" id="fundo">
+          <input type="url" placeholder="Botão Carrinho" id="botaoCarrinho">
+          <label><input type="checkbox" id="modoEscuro"> Modo Escuro</label>
+          <input type="url" placeholder="URL Música Ambiente" id="musicaAmbiente">
         </div>
       </section>
 
+      <!-- Preview -->
       <section id="preview" class="tab">
         <h2>🖥️ Preview em Tempo Real</h2>
         <iframe id="previewIframe" style="width:100%;height:600px;border:1px solid #ccc;border-radius:8px;"></iframe>
       </section>
 
+      <!-- Configurações -->
       <section id="config" class="tab">
-        <h2>⚙️ Configurações</h2>
+        <h2>⚙️ Configurações JSONBin</h2>
         <label for="jsonbinId">JSONBin ID:</label>
         <input type="text" id="jsonbinId" placeholder="Insira seu JSONBin ID">
         <label for="masterKey">Master Key:</label>
         <input type="password" id="masterKey" placeholder="Insira sua Master Key">
-        <button class="btn-primary">💾 Salvar no dispositivo</button>
-        <button class="btn-primary">📤 Publicar no Totem</button>
-        <button class="btn-danger">🔄 Restaurar Padrão</button>
+        <button class="btn-primary" onclick="salvarLocal()">💾 Salvar no dispositivo</button>
+        <button class="btn-primary" onclick="publicarTotem()">📤 Publicar no Totem</button>
+        <button class="btn-danger" onclick="restaurarPadrao()">🔄 Restaurar Padrão</button>
       </section>
     </main>
   </div>
