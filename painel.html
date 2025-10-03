@@ -10,60 +10,57 @@
 <body>
   <div id="app">
     <!-- Menu lateral -->
-    <aside id="sidebar">
+    <aside id="sidebar" class="collapsed">
       <h2>SeuNegócio</h2>
+      <button id="toggleMenu">☰</button>
       <nav id="menu">
         <ul>
-          <li onclick="abrirAba('dashboard')">📊 Dashboard</li>
-          <li onclick="abrirAba('categorias')">🗂️ Categorias</li>
-          <li onclick="abrirAba('modo-venda')">⚖️ Modo de Venda</li>
-          <li onclick="abrirAba('produtos')">📦 Produtos</li>
-          <li onclick="abrirAba('clientes')">👥 Clientes</li>
-          <li onclick="abrirAba('cupons')">🎟️ Cupons</li>
-          <li onclick="abrirAba('publicidade')">📢 Publicidade</li>
-          <li onclick="abrirAba('dados-loja')">🗝️ Dados da Loja</li>
-          <li onclick="abrirAba('cobertura')">🗺️ Cobertura</li>
-          <li onclick="abrirAba('customizar')">🎨 Customizar</li>
-          <li onclick="abrirAba('preview')">🖥️ Preview</li>
-          <li onclick="abrirAba('config')">⚙️ Configurações</li>
+          <li data-tab="dashboard">📊 Dashboard</li>
+          <li data-tab="categorias">🗂️ Categorias</li>
+          <li data-tab="modo-venda">⚖️ Modo de Venda</li>
+          <li data-tab="produtos">📦 Produtos</li>
+          <li data-tab="clientes">👥 Clientes</li>
+          <li data-tab="cupons">🎟️ Cupons</li>
+          <li data-tab="publicidade">📢 Publicidade</li>
+          <li data-tab="dados-loja">🗝️ Dados da Loja</li>
+          <li data-tab="cobertura">🗺️ Cobertura</li>
+          <li data-tab="customizar">🎨 Customizar</li>
+          <li data-tab="preview">🖥️ Preview</li>
+          <li data-tab="config">⚙️ Configurações</li>
         </ul>
       </nav>
     </aside>
 
-    <!-- Conteúdo principal -->
+    <!-- Conteúdo -->
     <main>
-      <!-- Dashboard -->
       <section id="dashboard" class="tab active">
         <h2>📊 Dashboard</h2>
         <canvas id="vendasChart"></canvas>
       </section>
 
-      <!-- Categorias -->
       <section id="categorias" class="tab">
         <h2>🗂️ Categorias</h2>
         <div class="form-group">
-          <input type="text" placeholder="Nova Categoria" id="novaCategoria">
-          <button class="btn-primary" onclick="adicionarCategoria()">Adicionar Categoria</button>
+          <input type="text" placeholder="Nova Categoria">
+          <button class="btn-primary">Adicionar Categoria</button>
         </div>
         <div id="category-tree"></div>
       </section>
 
-      <!-- Modo de Venda -->
       <section id="modo-venda" class="tab">
         <h2>⚖️ Modo de Venda</h2>
         <div class="form-group">
-          <select id="novoModoVenda">
+          <select>
             <option value="Unidade">Unidade</option>
             <option value="Kg">Kg</option>
             <option value="Litro">Litro</option>
             <option value="Combo">Combo</option>
           </select>
-          <input type="text" placeholder="Ex: 500g, 1/2 dz" id="descModoVenda">
-          <button class="btn-primary" onclick="adicionarModoVenda()">Adicionar</button>
+          <input type="text" placeholder="Ex: 500g, 1/2 dz">
+          <button class="btn-primary">Adicionar</button>
         </div>
       </section>
 
-      <!-- Produtos -->
       <section id="produtos" class="tab">
         <h2>📦 Produtos</h2>
         <div class="form-grid">
@@ -78,11 +75,10 @@
           <label><input id="prodDestaque" type="checkbox"> Destaque</label>
           <label><input id="prodAtivo" type="checkbox"> Ativo</label>
         </div>
-        <button id="btnAdicionarProduto" class="btn-primary">Adicionar Produto</button>
-        <div id="listaProdutosContainer" class="container-lista"></div>
+        <button class="btn-primary">Adicionar Produto</button>
+        <div id="listaProdutosContainer"></div>
       </section>
 
-      <!-- Clientes -->
       <section id="clientes" class="tab">
         <h2>👥 Clientes</h2>
         <div class="form-grid">
@@ -93,11 +89,9 @@
           <textarea placeholder="Observações"></textarea>
           <label><input type="checkbox"> Aceita Notificações</label>
         </div>
-        <button class="btn-primary" onclick="adicionarCliente()">Salvar Cliente</button>
-        <div id="clientesContainer" class="container-lista"></div>
+        <button class="btn-primary">Salvar Cliente</button>
       </section>
 
-      <!-- Cupons -->
       <section id="cupons" class="tab">
         <h2>🎟️ Cupons</h2>
         <div class="form-grid">
@@ -113,11 +107,9 @@
           <textarea placeholder="Mensagem"></textarea>
           <label><input type="checkbox"> Ativo</label>
         </div>
-        <button class="btn-primary" onclick="adicionarCupom()">Criar Cupom</button>
-        <div id="cuponsContainer" class="container-lista"></div>
+        <button class="btn-primary">Criar Cupom</button>
       </section>
 
-      <!-- Publicidade -->
       <section id="publicidade" class="tab">
         <h2>📢 Publicidade</h2>
         <div class="form-grid">
@@ -129,10 +121,9 @@
           <input type="url" placeholder="Facebook">
           <input type="url" placeholder="WhatsApp">
         </div>
-        <button class="btn-primary" onclick="salvarPublicidade()">Salvar Publicidade</button>
+        <button class="btn-primary">Salvar Publicidade</button>
       </section>
 
-      <!-- Dados da Loja -->
       <section id="dados-loja" class="tab">
         <h2>🗝️ Dados da Loja</h2>
         <div class="form-grid">
@@ -144,10 +135,8 @@
           <input type="url" placeholder="Logo (URL)">
           <textarea placeholder="Horários de Funcionamento"></textarea>
         </div>
-        <button class="btn-primary" onclick="salvarDadosLoja()">Salvar Dados</button>
       </section>
 
-      <!-- Cobertura -->
       <section id="cobertura" class="tab">
         <h2>🗺️ Cobertura</h2>
         <div class="form-grid">
@@ -155,11 +144,9 @@
           <input type="number" placeholder="Taxa de Entrega">
           <input type="number" placeholder="Tempo Estimado (min)">
         </div>
-        <button class="btn-primary" onclick="adicionarCobertura()">Adicionar Bairro</button>
-        <div id="coberturaContainer" class="container-lista"></div>
+        <button class="btn-primary">Adicionar Bairro</button>
       </section>
 
-      <!-- Customizar -->
       <section id="customizar" class="tab">
         <h2>🎨 Customizar</h2>
         <div class="form-grid">
@@ -170,23 +157,20 @@
         </div>
       </section>
 
-      <!-- Preview -->
       <section id="preview" class="tab">
         <h2>🖥️ Preview em Tempo Real</h2>
-        <iframe id="previewIframe" style="width:100%;height:600px;border:1px solid #ccc;border-radius:8px;background:#fff;"></iframe>
+        <iframe id="previewIframe" style="width:100%;height:600px;border:1px solid #ccc;border-radius:8px;"></iframe>
       </section>
 
-      <!-- Configurações -->
       <section id="config" class="tab">
-        <h2>⚙️ Configurações JSONBin</h2>
+        <h2>⚙️ Configurações</h2>
         <label for="jsonbinId">JSONBin ID:</label>
         <input type="text" id="jsonbinId" placeholder="Insira seu JSONBin ID">
-
         <label for="masterKey">Master Key:</label>
         <input type="password" id="masterKey" placeholder="Insira sua Master Key">
-
-        <button class="btn-primary" onclick="salvarLocal()">💾 Salvar no dispositivo</button>
-        <button class="btn-primary" onclick="publicarTotem()">📤 Publicar no Totem</button>
+        <button class="btn-primary">💾 Salvar no dispositivo</button>
+        <button class="btn-primary">📤 Publicar no Totem</button>
+        <button class="btn-danger">🔄 Restaurar Padrão</button>
       </section>
     </main>
   </div>
