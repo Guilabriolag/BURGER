@@ -187,3 +187,11 @@ button:hover {
   opacity: 1;
   transform: translateY(0);
 }
+
+.tab {
+  display: none;
+}
+
+.tab.active {
+  display: block;
+}
