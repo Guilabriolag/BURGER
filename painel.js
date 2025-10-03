@@ -32,18 +32,30 @@ let state = {
 let produtoEditandoIndex = null;
 
 // Navegação entre abas
-const tabs = document.querySelectorAll(".tab");
-const menuItems = document.querySelectorAll("#menu-bar li");
+document.addEventListener("DOMContentLoaded", () => {
+  const menuItems = document.querySelectorAll("#menu-bar li");
+  const tabs = document.querySelectorAll(".tab");
 
-menuItems.forEach(item => {
-  item.addEventListener("click", () => {
-    const target = item.dataset.tab;
-    tabs.forEach(tab => tab.classList.remove("active"));
-    document.getElementById(target).classList.add("active");
+  menuItems.forEach(item => {
+    item.addEventListener("click", () => {
+      const targetId = item.getAttribute("data-tab");
 
-    menuItems.forEach(i => i.classList.remove("active"));
-    item.classList.add("active");
+      // Remove 'active' de todas as abas e botões
+      tabs.forEach(tab => tab.classList.remove("active"));
+      menuItems.forEach(btn => btn.classList.remove("active"));
+
+      // Ativa a aba correspondente e o botão
+      const targetTab = document.getElementById(targetId);
+      if (targetTab) {
+        targetTab.classList.add("active");
+        item.classList.add("active");
+      }
+    });
   });
+
+  // Ativa a primeira aba por padrão
+  const firstTab = document.querySelector(".tab");
+  if (firstTab) firstTab.classList.add("active");
 });
 
 // LocalStorage
