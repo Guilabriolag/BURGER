@@ -272,8 +272,76 @@ function removerProduto(index) {
     atualizarPreview();
   }
 }
-
 // ===============================
 // Preview em tempo real
 // ===============================
-function atualizarPreview()
+function atualizarPreview() {
+  const iframe = document.getElementById("previewIframe");
+  iframe.srcdoc = gerarTotemHTML();
+}
+
+function gerarTotemHTML() {
+  return `
+    <html>
+      <head>
+        <title>${state.loja.nome}</title>
+        <style>
+          body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: ${state.loja.fundo || "#fff"};
+            color: ${state.loja.modoEscuro ? "#eee" : "#333"};
+          }
+          header {
+            background: ${state.loja.corPrimaria};
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+          }
+          .produto {
+            border-bottom: 1px solid #ccc;
+            padding: 10px;
+            display: flex;
+            gap: 10px;
+          }
+          .produto img {
+            height: 50px;
+            width: 50px;
+            object-fit: cover;
+          }
+        </style>
+      </head>
+      <body>
+        <header>
+          <img src="${state.loja.logo}" style="height:40px;">
+          <h1>${state.loja.nome}</h1>
+        </header>
+        <main>
+          <h2>Produtos:</h2>
+          ${state.produtos
+            .map(
+              p => `
+            <div class="produto">
+              <img src="${p.imagem}">
+              <div>
+                <strong>${p.nome}</strong> - R$ ${p.preco.toFixed(2)}
+              </div>
+            </div>`
+            )
+            .join("")}
+        </main>
+      </body>
+    </html>
+  `;
+}
+
+// ===============================
+// Inicialização
+// ===============================
+window.onload = () => {
+  carregarLocal();
+  atualizarCategoriasUI();
+  atualizarProdutosUI();
+  atualizarPreview();
+};
