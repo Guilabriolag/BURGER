@@ -31,26 +31,23 @@ let state = {
   cobertura: []
 };
 
+let produtoEditandoIndex = null;
+
 // ===============================
 // Navegação entre abas
 // ===============================
 const tabs = document.querySelectorAll(".tab");
-const menuItems = document.querySelectorAll("#menu li");
+const menuItems = document.querySelectorAll("#menu-bar li");
 
 menuItems.forEach(item => {
   item.addEventListener("click", () => {
     const target = item.dataset.tab;
     tabs.forEach(tab => tab.classList.remove("active"));
     document.getElementById(target).classList.add("active");
-  });
-});
 
-// ===============================
-// Menu lateral ocultável
-// ===============================
-const sidebar = document.getElementById("sidebar");
-document.getElementById("toggleMenu").addEventListener("click", () => {
-  sidebar.classList.toggle("collapsed");
+    menuItems.forEach(i => i.classList.remove("active"));
+    item.classList.add("active");
+  });
 });
 
 // ===============================
@@ -157,7 +154,6 @@ btnAdicionarCategoria.addEventListener("click", () => {
 });
 
 function atualizarCategoriasUI() {
-  // Listagem de categorias
   categoryTree.innerHTML = state.categorias
     .map((c, i) => `
       <div class="categoria">
@@ -167,7 +163,6 @@ function atualizarCategoriasUI() {
     `)
     .join("");
 
-  // Select em Produtos
   selectProdCategoria.innerHTML = state.categorias
     .map(c => `<option value="${c.nome}">${c.nome}</option>`)
     .join("");
@@ -206,26 +201,67 @@ btnAdicionarProduto.addEventListener("click", () => {
     return alert("⚠️ Nome e preço obrigatórios!");
   }
 
-  state.produtos.push(produto);
+  if (produtoEditandoIndex !== null) {
+    state.produtos[produtoEditandoIndex] = produto;
+    produtoEditandoIndex = null;
+    btnAdicionarProduto.textContent = "Adicionar Produto";
+  } else {
+    state.produtos.push(produto);
+  }
+
+  limparFormularioProduto();
   atualizarProdutosUI();
   salvarLocal();
   atualizarPreview();
 });
+
+function limparFormularioProduto() {
+  document.getElementById("prodNome").value = "";
+  document.getElementById("prodPreco").value = "";
+  document.getElementById("prodImagem").value = "";
+  document.getElementById("prodDescricao").value = "";
+  document.getElementById("prodCategoria").value = "";
+  document.getElementById("prodSubcategoria").value = "";
+  document.getElementById("prodModoVenda").value = "";
+  document.getElementById("prodEstoque").value = "";
+  document.getElementById("prodDestaque").checked = false;
+  document.getElementById("prodAtivo").checked = false;
+}
 
 function atualizarProdutosUI() {
   listaProdutosContainer.innerHTML = state.produtos
     .map((p, i) => `
       <div class="produto-card">
         <img src="${p.imagem}" alt="${p.nome}">
-        <div>
+        <div class="info">
           <h3>${p.nome}</h3>
           <p>R$ ${p.preco.toFixed(2)}</p>
           <p>${p.categoria}</p>
-          <button onclick="removerProduto(${i})" class="btn-danger">Excluir</button>
+        </div>
+        <div class="actions">
+          <button onclick="editarProduto(${i})" class="btn-secondary">✏️ Editar</button>
+          <button onclick="removerProduto(${i})" class="btn-danger">🗑️ Excluir</button>
         </div>
       </div>
     `)
     .join("");
+}
+
+function editarProduto(index) {
+  const p = state.produtos[index];
+  document.getElementById("prodNome").value = p.nome;
+  document.getElementById("prodPreco").value = p.preco;
+  document.getElementById("prodImagem").value = p.imagem;
+  document.getElementById("prodDescricao").value = p.descricao;
+  document.getElementById("prodCategoria").value = p.categoria;
+  document.getElementById("prodSubcategoria").value = p.subcategoria;
+  document.getElementById("prodModoVenda").value = p.modoVenda;
+  document.getElementById("prodEstoque").value = p.estoque;
+  document.getElementById("prodDestaque").checked = p.destaque;
+  document.getElementById("prodAtivo").checked = p.ativo;
+
+  produtoEditandoIndex = index;
+  btnAdicionarProduto.textContent = "Salvar Alterações";
 }
 
 function removerProduto(index) {
@@ -240,53 +276,4 @@ function removerProduto(index) {
 // ===============================
 // Preview em tempo real
 // ===============================
-function atualizarPreview() {
-  const iframe = document.getElementById("previewIframe");
-  iframe.srcdoc = gerarTotemHTML();
-}
-
-function gerarTotemHTML() {
-  return `
-    <html>
-      <head>
-        <title>${state.loja.nome}</title>
-        <style>
-          body { font-family: Arial, sans-serif; margin:0; padding:0; }
-          header { background:${state.loja.corPrimaria}; color:#fff; padding:10px; text-align:center; }
-          .produto { border-bottom:1px solid #ccc; padding:10px; display:flex; gap:10px; }
-          .produto img { height:50px; width:50px; object-fit:cover; }
-        </style>
-      </head>
-      <body>
-        <header>
-          <img src="${state.loja.logo}" style="height:40px;">
-          <h1>${state.loja.nome}</h1>
-        </header>
-        <main>
-          <h2>Produtos:</h2>
-          ${state.produtos
-            .map(
-              p => `
-            <div class="produto">
-              <img src="${p.imagem}">
-              <div>
-                <strong>${p.nome}</strong> - R$ ${p.preco.toFixed(2)}
-              </div>
-            </div>`
-            )
-            .join("")}
-        </main>
-      </body>
-    </html>
-  `;
-}
-
-// ===============================
-// Inicialização
-// ===============================
-window.onload = () => {
-  carregarLocal();
-  atualizarCategoriasUI();
-  atualizarProdutosUI();
-  atualizarPreview();
-};
+function atualizarPreview()
