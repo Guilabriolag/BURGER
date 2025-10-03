@@ -419,3 +419,25 @@ window.onload = () => {
   atualizarProdutosUI();
   atualizarPreview();
 };
+window.addEventListener("DOMContentLoaded", () => {
+  const tabs = document.querySelectorAll(".tab");
+  const menuItems = document.querySelectorAll("#menu-bar li");
+
+  menuItems.forEach(item => {
+    item.addEventListener("click", () => {
+      const targetId = item.getAttribute("data-tab");
+      tabs.forEach(tab => tab.classList.remove("active"));
+      const targetTab = document.getElementById(targetId);
+      if (targetTab) {
+        targetTab.classList.add("active");
+      }
+
+      menuItems.forEach(i => i.classList.remove("active"));
+      item.classList.add("active");
+    });
+  });
+
+  // Ativa a primeira aba por padrão
+  const firstTab = document.querySelector(".tab");
+  if (firstTab) firstTab.classList.add("active");
+});
