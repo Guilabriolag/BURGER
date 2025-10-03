@@ -360,48 +360,59 @@ function atualizarProdutosUI() {
     `)
     .join("");
 }
+function atualizarPreview() {
+  const iframe = document.getElementById("previewIframe");
+  iframe.srcdoc = gerarTotemHTML();
+}
 
-function editarProduto(index) {
-  const p = state.produtos[index];
-  document.getElementById("prodNome").value = p.nome;
-  document.getElementById("prodPreco").value = p.preco;
-  document.getElementById("prodImagem").value = p.imagem;
-  document.getElementById("prodDescricao").value = p.descricao;
-  document.getElementById("prodCategoria").value = p.categoria;
-  document.getElementById("prodSubcategoria").value = p.subcategoria;
-  document.getElementById("prodModoVenda").value = p.modoVenda;
-  document.getElementById("prodEstoque").value = p.estoque;
-  document.getElementById("prodDestaque").checked = p.dfunction editarProduto(index) {
-  const p = state.produtos[index];
-  document.getElementById("prodNome").value = p.nome;
-  document.getElementById("prodPreco").value = p.preco;
-  document.getElementById("prodImagem").value = p.imagem;
-  document.getElementById("prodDescricao").value = p.descricao;
-  document.getElementById("prodCategoria").value = p.categoria;
-  document.getElementById("prodSubcategoria").value = p.subcategoria;
-  document.getElementById("prodModoVenda").value = p.modoVenda;
-  document.getElementById("prodEstoque").value = p.estoque;
-  document.getElementById("prodDestaque").checked = p.destaque;
-  document.getElementById("prodAtivo").checked = p.ativo;
-
-  produtoEditandoIndex = index;
-  btnAdicionarProduto.textContent = "Salvar Alterações";
-}function editarProduto(index) {
-  const p = state.produtos[index];
-  document.getElementById("prodNome").value = p.nome;
-  document.getElementById("prodPreco").value = p.preco;
-  document.getElementById("prodImagem").value = p.imagem;
-  document.getElementById("prodDescricao").value = p.descricao;
-  document.getElementById("prodCategoria").value = p.categoria;
-  document.getElementById("prodSubcategoria").value = p.subcategoria;
-  document.getElementById("prodModoVenda").value = p.modoVenda;
-  document.getElementById("prodEstoque").value = p.estoque;
-  document.getElementById("prodDestaque").checked = p.destaque;
-  document.getElementById("prodAtivo").checked = p.ativo;
-
-  produtoEditandoIndex = index;
-  btnAdicionarProduto.textContent = "Salvar Alterações";
-}window.onload = () => {
+function gerarTotemHTML() {
+  return `
+    <html>
+      <head>
+        <title>${state.loja.nome}</title>
+        <style>
+          body {
+            font-family: Arial, sans-serif;
+            background: ${state.loja.fundo || "#fff"};
+            color: ${state.loja.modoEscuro ? "#eee" : "#333"};
+            padding: 20px;
+          }
+          .produto {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+          }
+          .produto img {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 6px;
+          }
+        </style>
+      </head>
+      <body>
+        <h1>${state.loja.nome}</h1>
+        <h2>Produtos:</h2>
+        ${state.produtos
+          .map(
+            p => `
+          <div class="produto">
+            <img src="${p.imagem}" alt="${p.nome}">
+            <div>
+              <strong>${p.nome}</strong><br>
+              R$ ${p.preco.toFixed(2)}<br>
+              ${p.descricao}
+            </div>
+          </div>
+        `
+          )
+          .join("")}
+      </body>
+    </html>
+  `;
+}
+window.onload = () => {
   carregarLocal();
   atualizarCategoriasUI();
   atualizarModosVendaUI();
