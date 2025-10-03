@@ -48,7 +48,7 @@ body {
   background-color: #34495e;
 }
 
-/* Conteúdo principal */
+/* ConteĆŗdo principal */
 main {
   flex: 1;
   padding: 30px;
@@ -62,7 +62,7 @@ main {
   display: block;
 }
 
-/* Formulários */
+/* FormulĆ�rios */
 .form-group {
   display: flex;
   gap: 10px;
@@ -92,7 +92,7 @@ textarea {
   min-height: 80px;
 }
 
-/* Botões */
+/* BotĆµes */
 button {
   padding: 10px 20px;
   border: none;
